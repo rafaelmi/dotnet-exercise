@@ -1,5 +1,4 @@
 ﻿using Exercise.Data.Models;
-using Exercise.Domain.Models;
 
 namespace Exercise.Data.Repositories
 {

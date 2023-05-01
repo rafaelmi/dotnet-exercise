@@ -1,8 +1,6 @@
-﻿using Exercise.Data.Models;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using System.Data;
-using Exercise.Domain.Models;
-using System.Drawing;
+using Exercise.Data.Models;
 
 namespace Exercise.Data.Repositories
 {

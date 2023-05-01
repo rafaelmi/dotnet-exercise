@@ -11,8 +11,4 @@
     <PackageReference Include="Npgsql" Version="7.0.4" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Exercise.Domain\Exercise.Domain.csproj" />
-  </ItemGroup>
-
 </Project>
