@@ -1,12 +1,15 @@
 ﻿using Exercise.Data.Models;
+using Exercise.Domain.Models;
 
 namespace Exercise.Data.Repositories
 {
     public interface ICoursesRepository
     {
-        Task<IEnumerable<Course>> GetMany(int size, int offset);
-        Task<int> Create(Course course);
-        Task<int> Update(Course course);
+        Task<CourseDTO> Get(int courseId);
+        Task<IEnumerable<CourseDTO>> GetAll();
+        Task<IEnumerable<CourseDTO>> GetMany(int size, int offset);
+        Task<int> Create(CourseDTO course);
+        Task<int> Update(int courseId, CourseDTO course);
         Task<int> Delete(int courseId);
     }
 }
