@@ -37,8 +37,8 @@ namespace Exercise.Data.Repositories
 
         public async Task<int> Create (UserDTO user)
         {
-            string query = "INSERT INTO Users (user_id, password) " +
-                           $"VALUES ('{user.UserId}', '{user.Password}')";
+            string query = "INSERT INTO Users (user_id, password, name) " +
+                           $"VALUES ('{user.UserId}', '{user.Password}', '{user.Name}')";
             return await ExecuteNonQuery(query);
         }
 
@@ -46,6 +46,7 @@ namespace Exercise.Data.Repositories
         {
             string query = "UPDATE Users SET " +
                                 $"password = '{user.Password}', " +
+                                $"name = '{user.Name}' " +
                                 $"WHERE user_id = {userId}";
             return await ExecuteNonQuery(query);
         }
@@ -73,7 +74,8 @@ namespace Exercise.Data.Repositories
             if (row != null) return new UserDTO
             {
                 UserId = (int)row["user_id"],
-                Password = (string)row["password"]
+                Password = (string)row["password"],
+                Name = (string)row["name"]
             };
             else return null;
         }

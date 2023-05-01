@@ -20,4 +20,8 @@
     <ProjectReference Include="..\Exercise.Domain\Exercise.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Helpers\" />
+  </ItemGroup>
+
 </Project>

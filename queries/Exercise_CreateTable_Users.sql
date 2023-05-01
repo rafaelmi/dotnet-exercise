@@ -1,5 +1,6 @@
 CREATE TABLE Users
 (
 	user_id INT PRIMARY KEY,
-	password VARCHAR(125) NOT NULL
+	password VARCHAR(125) NOT NULL,
+	name VARCHAR(125) NOT NULL
 );

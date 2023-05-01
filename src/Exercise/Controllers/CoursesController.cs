@@ -23,37 +23,37 @@ namespace Exercise.Controllers
 
         // GET: api/<CoursesController>
         [HttpGet]
-        public async Task<IEnumerable<CourseDTO>> Get()
+        public async Task<IEnumerable<Course>> Get()
         {
-            return await _coursesRepository.GetAll();
+            return MapResponse(await _coursesRepository.GetAll());
         }
 
         // GET api/<CoursesController>/size/5/offset/10
         [HttpGet("size/{size}/offset/{offset}")]
-        public async Task<IEnumerable<CourseDTO>> Get(int size, int offset)
+        public async Task<IEnumerable<Course>> Get(int size, int offset)
         {
-            return await _coursesRepository.GetMany(size, offset);
+            return MapResponse(await _coursesRepository.GetMany(size, offset));
         }
 
         // GET api/<CoursesController>/5
         [HttpGet("{courseId}")]
-        public async Task<CourseDTO> Get(int courseId)
+        public async Task<Course> Get(int courseId)
         {
-            return await _coursesRepository.Get(courseId);
+            return ParseDTO(await _coursesRepository.Get(courseId));
         }
 
         // POST api/<CoursesController>
         [HttpPost]
-        public async Task Post([FromBody] CourseDTO course)
+        public async Task Post([FromBody] Course course)
         {
-            await _coursesServices.Create(course);
+            await _coursesServices.Create(ToDTO(course));
         }
 
         // PUT api/<CoursesController>/5
         [HttpPut("{courseId}")]
-        public async Task Put(int courseId, [FromBody] CourseDTO course)
+        public async Task Put(int courseId, [FromBody] Course course)
         {
-            await _coursesServices.Update(courseId, course);
+            await _coursesServices.Update(courseId, ToDTO(course));
         }
 
         // DELETE api/<CoursesController>/5
@@ -62,5 +62,30 @@ namespace Exercise.Controllers
         {
             await _coursesServices.Delete(courseId);
         }
+
+        private IEnumerable<Course> MapResponse(IEnumerable<CourseDTO> dtos)
+        {
+            List<Course> courses = new List<Course>();
+            foreach (var dto in dtos)
+            {
+                courses.Add(ParseDTO(dto));
+            }
+            return courses;
+        }
+
+        private Course ParseDTO(CourseDTO courseDto) => new Course
+        {
+            CourseId = courseDto.CourseId,
+            Title = courseDto.Title,
+            Description = courseDto.Description
+        };
+
+        private CourseDTO ToDTO(Course course) => new CourseDTO
+        {
+            CourseId = course.CourseId,
+            Title = course.Title,
+            Description = course.Description
+        };
+
     }
 }
