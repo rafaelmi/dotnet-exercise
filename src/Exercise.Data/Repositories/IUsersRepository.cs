@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Exercise.Data.Repositories
 {
-    internal interface IUsersRepository
+    public interface IUsersRepository
     {
         Task<UserDTO> Get(int userId);
         Task<IEnumerable<UserDTO>> GetAll();
