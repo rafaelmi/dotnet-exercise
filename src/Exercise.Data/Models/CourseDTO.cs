@@ -1,6 +1,6 @@
 ﻿namespace Exercise.Data.Models
 {
-    public class Course
+    public class CourseDTO
     {
         public int CourseId { get; set; }
         public string Title { get; set; }
