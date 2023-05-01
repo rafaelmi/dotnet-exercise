@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Drawing;
 using Exercise.Models;
 using Exercise.Data.Repositories;
-using Exercise.Domain.Models;
-using System.Drawing;
 using Exercise.Data.Models;
+using Exercise.Domain.Interfaces;
 
 namespace Exercise.Controllers
 {
@@ -12,10 +12,13 @@ namespace Exercise.Controllers
     public class CoursesController : ControllerBase
     {
         private readonly ICoursesRepository _coursesRepository;
+        private readonly ICoursesService _coursesServices;
 
-        public CoursesController(ICoursesRepository coursesRepository)
+        public CoursesController(ICoursesRepository coursesRepository,
+                                 ICoursesService coursesServices)
         {
             _coursesRepository = coursesRepository;
+            _coursesServices = coursesServices;
         }
 
         // GET: api/<CoursesController>
@@ -43,23 +46,21 @@ namespace Exercise.Controllers
         [HttpPost]
         public async Task Post([FromBody] CourseDTO course)
         {
-            await _coursesRepository.Create(course);
+            await _coursesServices.Create(course);
         }
 
         // PUT api/<CoursesController>/5
         [HttpPut("{courseId}")]
         public async Task Put(int courseId, [FromBody] CourseDTO course)
         {
-            await _coursesRepository.Update(courseId, course);
+            await _coursesServices.Update(courseId, course);
         }
 
         // DELETE api/<CoursesController>/5
         [HttpDelete("{courseId}")]
         public async Task Delete(int courseId)
         {
-            await _coursesRepository.Delete(courseId);
+            await _coursesServices.Delete(courseId);
         }
-
-        //        private GenerateDTO (Course)
     }
 }
