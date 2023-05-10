@@ -1,6 +1,7 @@
 ﻿using Exercise.Data.Models;
 using AutoMapper.QueryableExtensions;
 using AutoMapper;
+using Exercise.Data.DTOs;
 
 namespace Exercise.Data.Repositories
 {

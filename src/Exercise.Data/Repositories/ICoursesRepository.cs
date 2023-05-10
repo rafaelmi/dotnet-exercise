@@ -1,4 +1,4 @@
-﻿using Exercise.Data.Models;
+﻿using Exercise.Data.DTOs;
 
 namespace Exercise.Data.Repositories
 {

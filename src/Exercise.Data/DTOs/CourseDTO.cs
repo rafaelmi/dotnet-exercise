@@ -1,4 +1,4 @@
-﻿namespace Exercise.Data.Models
+﻿namespace Exercise.Data.DTOs
 {
     public class CourseDTO
     {

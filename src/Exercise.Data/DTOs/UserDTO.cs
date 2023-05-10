@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Exercise.Data.Models
+namespace Exercise.Data.DTOs
 {
     public class UserDTO
     {

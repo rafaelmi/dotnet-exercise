@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Exercise.Data.Repositories;
-using Exercise.Data.Models;
 using Exercise.Domain.Interfaces;
+using Exercise.Data.DTOs;
 
 namespace Exercise.Domain.Services
 {

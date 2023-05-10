@@ -1,4 +1,4 @@
-﻿using Exercise.Data.Models;
+﻿using Exercise.Data.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;

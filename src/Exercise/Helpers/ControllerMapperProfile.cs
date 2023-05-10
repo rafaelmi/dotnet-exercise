@@ -1,16 +1,16 @@
 ﻿using AutoMapper;
 using Exercise.Data.DTOs;
-using Exercise.Data.Models;
+using Exercise.Models;
 
-namespace Exercise.Data.Helpers
+namespace Exercise.Helpers
 {
-    public class DataLayerMapperProfile : Profile
+    public class ControllerMapperProfile : Profile
     {
-        public DataLayerMapperProfile()
+        public ControllerMapperProfile() 
         {
             CreateMap<User, UserDTO>();
             CreateMap<UserDTO, User>();
-            CreateMap<Course, CourseDTO>();
+            CreateMap<Course,  CourseDTO>();
             CreateMap<CourseDTO, Course>();
         }
     }
