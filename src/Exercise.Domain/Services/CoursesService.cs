@@ -18,20 +18,20 @@ namespace Exercise.Domain.Services
             _coursesRepository = coursesRepository;
         }
 
-        public async Task<bool> Create(CourseDTO course)
+        public bool Create(CourseDTO course)
         {
-            int count = await _coursesRepository.Create(course);
+            int count = _coursesRepository.Create(course);
             return count == 1;
         }
 
-        public async Task<bool> Update(int courseId, CourseDTO course)
+        public bool Update(int courseId, CourseDTO course)
         {
-            int count = await _coursesRepository.Update(courseId, course);
+            int count = _coursesRepository.Update(courseId, course);
             return count == 1;
         }
-        public async Task<bool> Delete(int courseId)
+        public bool Delete(int courseId)
         {
-            int count = await _coursesRepository.Delete(courseId);
+            int count = _coursesRepository.Delete(courseId);
             return count == 1;
         }
     }

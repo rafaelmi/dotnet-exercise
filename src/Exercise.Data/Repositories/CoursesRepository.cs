@@ -1,83 +1,72 @@
-﻿using Microsoft.Extensions.Configuration;
-using System.Data;
-using Exercise.Data.Models;
+﻿using Exercise.Data.Models;
+using AutoMapper.QueryableExtensions;
+using AutoMapper;
 
 namespace Exercise.Data.Repositories
 {
-    public class CoursesRepository : Repository, ICoursesRepository
+    public class CoursesRepository : ICoursesRepository
     {
-        private readonly TableProperties _tableProperties;
+        private readonly GlobalDbContext _context;
+        private readonly IConfigurationProvider _configurationProvider;
+        private readonly IMapper _mapper;
 
-        public CoursesRepository(IConfiguration configuration) : base (configuration)
+        public CoursesRepository(GlobalDbContext context,
+            IConfigurationProvider configurationProvider,
+            IMapper mapper)
         {
-            _tableProperties = new TableProperties 
-            {
-                Name = "Courses",
-                IdColumnName = "course_id",
-            };
+            _context = context;
+            _configurationProvider = configurationProvider;
+            _mapper = mapper;
         }
 
-        public async Task<CourseDTO> Get(int courseId)
+        public CourseDTO Get(int courseId)
         {
-            DataRow dataRow = await Get(_tableProperties, courseId);
-            return CreateDTO(dataRow);
+            return _mapper.Map<CourseDTO>(GetAsEntity(courseId));
         }
 
-        public async Task<IEnumerable<CourseDTO>> GetAll()
+        public IEnumerable<CourseDTO> GetAll()
         {
-            DataSet dataSet = await GetAll(_tableProperties);
-            return CreateDTOList(dataSet);
+            return _context.Courses
+                .ProjectTo<CourseDTO>(_configurationProvider)
+                .ToList();
         }
 
-        public async Task<IEnumerable<CourseDTO>> GetMany (int size, int offset)
+        public IEnumerable<CourseDTO> GetMany(int size, int offset)
         {
-            DataSet dataSet = await GetMany(_tableProperties, size, offset);
-            return CreateDTOList(dataSet);
+            return _context.Courses
+                .Skip(offset)
+                .Take(size)
+                .ProjectTo<CourseDTO>(_configurationProvider)
+                .ToList();
         }
 
-        public async Task<int> Create (CourseDTO course)
+        public int Create(CourseDTO courseDto)
         {
-            string query = "INSERT INTO Courses (Title, Description) " +
-                           $"VALUES ('{course.Title}', '{course.Description}')";
-            return await ExecuteNonQuery(query);
+            Course course = _mapper.Map<Course>(courseDto);
+            _context.Add(course);
+            return _context.SaveChanges();
         }
 
-        public async Task<int> Update (int courseId, CourseDTO course)
+        public int Update(int courseId, CourseDTO courseDto)
         {
-            string query = "UPDATE Courses SET " +
-                                $"title = '{course.Title}', " +
-                                $"description = '{course.Description}' " +
-                                $"WHERE course_id = {courseId}";
-            return await ExecuteNonQuery(query);
+            var course = GetAsEntity(courseId);
+            course.Title = courseDto.Title;
+            course.Description = courseDto.Description;
+            return _context.SaveChanges();
         }
 
-        public async Task<int> Delete (int courseId)
+        public int Delete(int courseId)
         {
-            string query = $"DELETE FROM Courses WHERE course_id = {courseId}";
-            return await ExecuteNonQuery(query);
+            var course = GetAsEntity(courseId);
+            _context.Courses.Remove(course);
+            return _context.SaveChanges();
         }
 
-        private IEnumerable<CourseDTO> CreateDTOList (DataSet dataSet)
+        private Course GetAsEntity (int courseId)
         {
-            List<CourseDTO> collection = new List<CourseDTO>();
-
-            foreach (DataRow row in dataSet.Tables[0].Rows)
-            {
-                collection.Add(CreateDTO(row));
-            }
-
-            return collection;
-        }
-
-        private CourseDTO CreateDTO(DataRow row)
-        {
-            if (row != null) return new CourseDTO
-            {
-                CourseId = (int)row["course_id"],
-                Title = (string)row["title"],
-                Description = (string)row["description"]
-            };
-            else return null;
+            var course = _context.Courses.Find(courseId);
+            if (course == null) throw new KeyNotFoundException();
+            return course;
         }
     }
 }

@@ -9,11 +9,11 @@ namespace Exercise.Data.Repositories
 {
     public interface IUsersRepository
     {
-        Task<UserDTO> Get(int userId);
-        Task<IEnumerable<UserDTO>> GetAll();
-        Task<IEnumerable<UserDTO>> GetMany(int size, int offset);
-        Task<int> Create(UserDTO user);
-        Task<int> Update(int userId, UserDTO user);
-        Task<int> Delete(int userId);
+        UserDTO Get(int userId);
+        IEnumerable<UserDTO> GetAll();
+        IEnumerable<UserDTO> GetMany(int size, int offset);
+        int Create(UserDTO user);
+        int Update(int userId, UserDTO user);
+        int Delete(int userId);
     }
 }

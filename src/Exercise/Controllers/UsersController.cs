@@ -23,44 +23,44 @@ namespace Exercise.Controllers
 
         // GET: api/<UsersController>
         [HttpGet]
-        public async Task<IEnumerable<User>> Get()
+        public IEnumerable<User> Get()
         {
-            return MapResponse(await _usersRepository.GetAll());
+            return MapResponse(_usersRepository.GetAll());
         }
 
         // GET api/<UsersController>/size/5/offset/10
         [HttpGet("size/{size}/offset/{offset}")]
-        public async Task<IEnumerable<User>> Get(int size, int offset)
+        public IEnumerable<User> Get(int size, int offset)
         {
-            return MapResponse(await _usersRepository.GetMany(size, offset));
+            return MapResponse(_usersRepository.GetMany(size, offset));
         }
 
         // GET api/<UsersController>/5
         [HttpGet("{userId}")]
-        public async Task<User> Get(int userId)
+        public User Get(int userId)
         {
-            return ParseDTO(await _usersRepository.Get(userId));
+            return ParseDTO(_usersRepository.Get(userId));
         }
 
         // POST api/<UsersController>
         [HttpPost]
-        public async Task Post([FromBody] User user)
+        public void Post([FromBody] User user)
         {
-            await _usersServices.Create(ToDTO(user));
+            _usersServices.Create(ToDTO(user));
         }
 
         // PUT api/<UsersController>/5
         [HttpPut("{userId}")]
-        public async Task Put(int userId, [FromBody] User user)
+        public void Put(int userId, [FromBody] User user)
         {
-            await _usersServices.Update(userId, ToDTO(user));
+            _usersServices.Update(userId, ToDTO(user));
         }
 
         // DELETE api/<UsersController>/5
         [HttpDelete("{userId}")]
-        public async Task Delete(int userId)
+        public void Delete(int userId)
         {
-            await _usersServices.Delete(userId);
+            _usersServices.Delete(userId);
         }
 
         private IEnumerable<User> MapResponse(IEnumerable<UserDTO> dtos)

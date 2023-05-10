@@ -4,8 +4,8 @@ namespace Exercise.Domain.Interfaces
 {
     public interface IUsersService
     {
-        Task<bool> Create(UserDTO user);
-        Task<bool> Update(int userId, UserDTO user);
-        Task<bool> Delete(int userId);
+        bool Create(UserDTO user);
+        bool Update(int userId, UserDTO user);
+        bool Delete(int userId);
     }
 }

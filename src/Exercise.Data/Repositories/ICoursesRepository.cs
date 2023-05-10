@@ -4,11 +4,11 @@ namespace Exercise.Data.Repositories
 {
     public interface ICoursesRepository
     {
-        Task<CourseDTO> Get(int courseId);
-        Task<IEnumerable<CourseDTO>> GetAll();
-        Task<IEnumerable<CourseDTO>> GetMany(int size, int offset);
-        Task<int> Create(CourseDTO course);
-        Task<int> Update(int courseId, CourseDTO course);
-        Task<int> Delete(int courseId);
+        CourseDTO Get(int courseId);
+        IEnumerable<CourseDTO> GetAll();
+        IEnumerable<CourseDTO> GetMany(int size, int offset);
+        int Create(CourseDTO course);
+        int Update(int courseId, CourseDTO course);
+        int Delete(int courseId);
     }
 }

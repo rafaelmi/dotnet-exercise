@@ -18,20 +18,20 @@ namespace Exercise.Domain.Services
             _usersRepository = usersRepository;
         }
 
-        public async Task<bool> Create(UserDTO user)
+        public bool Create(UserDTO user)
         {
-            int count = await _usersRepository.Create(user);
+            int count = _usersRepository.Create(user);
             return count == 1;
         }
 
-        public async Task<bool> Update(int userId, UserDTO user)
+        public bool Update(int userId, UserDTO user)
         {
-            int count = await _usersRepository.Update(userId, user);
+            int count = _usersRepository.Update(userId, user);
             return count == 1;
         }
-        public async Task<bool> Delete(int userId)
+        public bool Delete(int userId)
         {
-            int count = await _usersRepository.Delete(userId);
+            int count = _usersRepository.Delete(userId);
             return count == 1;
         }
     }

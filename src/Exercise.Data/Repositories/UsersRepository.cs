@@ -1,83 +1,72 @@
-﻿using Microsoft.Extensions.Configuration;
-using System.Data;
-using Exercise.Data.Models;
+﻿using Exercise.Data.Models;
+using AutoMapper.QueryableExtensions;
+using AutoMapper;
 
 namespace Exercise.Data.Repositories
 {
-    public class UsersRepository : Repository, IUsersRepository
+    public class UsersRepository : IUsersRepository
     {
-        private readonly TableProperties _tableProperties;
+        private readonly GlobalDbContext _context;
+        private readonly IConfigurationProvider _configurationProvider;
+        private readonly IMapper _mapper;
 
-        public UsersRepository(IConfiguration configuration) : base (configuration)
+        public UsersRepository(GlobalDbContext context,
+            IConfigurationProvider configurationProvider,
+            IMapper mapper)
         {
-            _tableProperties = new TableProperties 
-            {
-                Name = "Users",
-                IdColumnName = "user_id",
-            };
+            _context = context;
+            _configurationProvider = configurationProvider;
+            _mapper = mapper;
         }
 
-        public async Task<UserDTO> Get(int userId)
+        public UserDTO Get(int userId)
         {
-            DataRow dataRow = await Get(_tableProperties, userId);
-            return CreateDTO(dataRow);
+            return _mapper.Map<UserDTO>(GetAsEntity(userId));
         }
 
-        public async Task<IEnumerable<UserDTO>> GetAll()
+        public IEnumerable<UserDTO> GetAll()
         {
-            DataSet dataSet = await GetAll(_tableProperties);
-            return CreateDTOList(dataSet);
+            return _context.Users
+                .ProjectTo<UserDTO>(_configurationProvider)
+                .ToList();
         }
 
-        public async Task<IEnumerable<UserDTO>> GetMany (int size, int offset)
+        public IEnumerable<UserDTO> GetMany(int size, int offset)
         {
-            DataSet dataSet = await GetMany(_tableProperties, size, offset);
-            return CreateDTOList(dataSet);
+            return _context.Users
+                .Skip(offset)
+                .Take(size)
+                .ProjectTo<UserDTO>(_configurationProvider)
+                .ToList();
         }
 
-        public async Task<int> Create (UserDTO user)
+        public int Create(UserDTO userDto)
         {
-            string query = "INSERT INTO Users (user_id, password, name) " +
-                           $"VALUES ('{user.UserId}', '{user.Password}', '{user.Name}')";
-            return await ExecuteNonQuery(query);
+            User user = _mapper.Map<User>(userDto);
+            _context.Add(user);
+            return _context.SaveChanges();
         }
 
-        public async Task<int> Update (int userId, UserDTO user)
+        public int Update(int userId, UserDTO userDto)
         {
-            string query = "UPDATE Users SET " +
-                                $"password = '{user.Password}', " +
-                                $"name = '{user.Name}' " +
-                                $"WHERE user_id = {userId}";
-            return await ExecuteNonQuery(query);
+            var user = GetAsEntity(userId);
+            user.Name = userDto.Name;
+            user.Password = userDto.Password;
+            return _context.SaveChanges();
         }
 
-        public async Task<int> Delete (int userId)
+        public int Delete(int userId)
         {
-            string query = $"DELETE FROM Users WHERE user_id = {userId}";
-            return await ExecuteNonQuery(query);
+            var user = GetAsEntity(userId);
+            _context.Users.Remove(user);
+            return _context.SaveChanges();
         }
 
-        private IEnumerable<UserDTO> CreateDTOList (DataSet dataSet)
+        private User GetAsEntity(int userId)
         {
-            List<UserDTO> collection = new List<UserDTO>();
-
-            foreach (DataRow row in dataSet.Tables[0].Rows)
-            {
-                collection.Add(CreateDTO(row));
-            }
-
-            return collection;
-        }
-
-        private UserDTO CreateDTO(DataRow row)
-        {
-            if (row != null) return new UserDTO
-            {
-                UserId = (int)row["user_id"],
-                Password = (string)row["password"],
-                Name = (string)row["name"]
-            };
-            else return null;
+            var user = _context.Users.Find(userId);
+            if (user == null) throw new KeyNotFoundException();
+            return user;
         }
     }
 }
