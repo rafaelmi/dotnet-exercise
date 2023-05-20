@@ -1,7 +1,8 @@
 ﻿using AutoMapper.QueryableExtensions;
 using AutoMapper;
 using Exercise.Data.Models;
-using Exercise.Data.DTOs;
+using Exercise.Common.CustomExceptions;
+using Exercise.Common.DTOs;
 
 namespace Exercise.Data.Repositories
 {
@@ -22,7 +23,7 @@ namespace Exercise.Data.Repositories
 
         public CourseDTO Get(int courseId)
         {
-            return _mapper.Map<CourseDTO>(GetAsEntity(courseId));
+            return _mapper.Map<CourseDTO>(_context.Courses.Find(courseId));
         }
 
         public IEnumerable<CourseDTO> GetAll()
@@ -50,7 +51,7 @@ namespace Exercise.Data.Repositories
 
         public int Update(int courseId, CourseDTO courseDto)
         {
-            var course = GetAsEntity(courseId);
+            var course = GetEntity(courseId);
             course.Title = courseDto.Title;
             course.Description = courseDto.Description;
             return _context.SaveChanges();
@@ -58,15 +59,15 @@ namespace Exercise.Data.Repositories
 
         public int Delete(int courseId)
         {
-            var course = GetAsEntity(courseId);
+            var course = GetEntity(courseId);
             _context.Courses.Remove(course);
             return _context.SaveChanges();
         }
 
-        private Course GetAsEntity (int courseId)
+        private Course GetEntity (int courseId)
         {
             var course = _context.Courses.Find(courseId);
-            if (course == null) throw new KeyNotFoundException();
+            if (course == null) throw new DbRecordNotFoundException();
             return course;
         }
     }

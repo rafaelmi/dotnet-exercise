@@ -7,8 +7,10 @@ namespace Exercise.Data.Models
     {
         [Column("course_id")]
         public int CourseId { get; set; }
+
         [Column("title")]
         public string Title { get; set; }
+
         [Column("description")]
         public string? Description { get; set; }
     }

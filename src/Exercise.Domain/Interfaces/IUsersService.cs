@@ -1,11 +1,11 @@
-﻿using Exercise.Data.DTOs;
+﻿using Exercise.Common.DTOs;
 
 namespace Exercise.Domain.Interfaces
 {
     public interface IUsersService
     {
-        bool Create(UserDTO user);
-        bool Update(int userId, UserDTO user);
-        bool Delete(int userId);
+        void Create(UserDTO user);
+        void Update(int userId, UserDTO user);
+        void Delete(int userId);
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Exercise.Data.Repositories;
 using Exercise.Domain.Interfaces;
-using Exercise.Data.DTOs;
+using Exercise.Common.DTOs;
 
 namespace Exercise.Domain.Services
 {
@@ -18,21 +18,18 @@ namespace Exercise.Domain.Services
             _usersRepository = usersRepository;
         }
 
-        public bool Create(UserDTO user)
+        public void Create(UserDTO user)
         {
-            int count = _usersRepository.Create(user);
-            return count == 1;
+            _usersRepository.Create(user);
         }
 
-        public bool Update(int userId, UserDTO user)
+        public void Update(int userId, UserDTO user)
         {
-            int count = _usersRepository.Update(userId, user);
-            return count == 1;
+            _usersRepository.Update(userId, user);
         }
-        public bool Delete(int userId)
+        public void Delete(int userId)
         {
-            int count = _usersRepository.Delete(userId);
-            return count == 1;
+            _usersRepository.Delete(userId);
         }
     }
 }

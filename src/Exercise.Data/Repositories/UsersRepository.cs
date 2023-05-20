@@ -1,7 +1,8 @@
 ﻿using Exercise.Data.Models;
 using AutoMapper.QueryableExtensions;
 using AutoMapper;
-using Exercise.Data.DTOs;
+using Exercise.Common.CustomExceptions;
+using Exercise.Common.DTOs;
 
 namespace Exercise.Data.Repositories
 {
@@ -22,7 +23,15 @@ namespace Exercise.Data.Repositories
 
         public UserDTO Get(int userId)
         {
-            return _mapper.Map<UserDTO>(GetAsEntity(userId));
+            return _mapper.Map<UserDTO>(_context.Users.Find(userId));
+        }
+
+        public UserDTO GetByUsername(string username)
+        {
+            var user = _context.Users
+                               .Where(u => u.Username == username)
+                               .FirstOrDefault();
+            return _mapper.Map<UserDTO>(user);
         }
 
         public IEnumerable<UserDTO> GetAll()
@@ -50,7 +59,7 @@ namespace Exercise.Data.Repositories
 
         public int Update(int userId, UserDTO userDto)
         {
-            var user = GetAsEntity(userId);
+            var user = GetEntity(userId);
             user.Name = userDto.Name;
             user.Password = userDto.Password;
             return _context.SaveChanges();
@@ -58,15 +67,15 @@ namespace Exercise.Data.Repositories
 
         public int Delete(int userId)
         {
-            var user = GetAsEntity(userId);
+            var user = GetEntity(userId);
             _context.Users.Remove(user);
             return _context.SaveChanges();
         }
 
-        private User GetAsEntity(int userId)
+        private User GetEntity(int userId)
         {
             var user = _context.Users.Find(userId);
-            if (user == null) throw new KeyNotFoundException();
+            if (user == null) throw new DbRecordNotFoundException();
             return user;
         }
     }

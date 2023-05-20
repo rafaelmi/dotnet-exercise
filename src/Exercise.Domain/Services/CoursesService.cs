@@ -18,21 +18,18 @@ namespace Exercise.Domain.Services
             _coursesRepository = coursesRepository;
         }
 
-        public bool Create(CourseDTO course)
+        public void Create(CourseDTO course)
         {
-            int count = _coursesRepository.Create(course);
-            return count == 1;
+            _coursesRepository.Create(course);
         }
 
-        public bool Update(int courseId, CourseDTO course)
+        public void Update(int courseId, CourseDTO course)
         {
-            int count = _coursesRepository.Update(courseId, course);
-            return count == 1;
+            _coursesRepository.Update(courseId, course);
         }
-        public bool Delete(int courseId)
+        public void Delete(int courseId)
         {
-            int count = _coursesRepository.Delete(courseId);
-            return count == 1;
+            _coursesRepository.Delete(courseId);
         }
     }
 }

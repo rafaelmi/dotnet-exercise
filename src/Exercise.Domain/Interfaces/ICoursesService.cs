@@ -4,8 +4,8 @@ namespace Exercise.Domain.Interfaces
 {
     public interface ICoursesService
     {
-        bool Create(CourseDTO course);
-        bool Update(int courseId, CourseDTO course);
-        bool Delete(int courseId);
+        void Create(CourseDTO course);
+        void Update(int courseId, CourseDTO course);
+        void Delete(int courseId);
     }
 }
